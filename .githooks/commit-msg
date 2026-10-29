@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+commit_message=$1
+
+if ! grep -iq '^Assisted-by: Copilot$' "$commit_message"; then
+  printf '\nAssisted-by: Copilot\n' >> "$commit_message"
+fi

@@ -2,17 +2,20 @@
 """Small JSON API for analyzing public GitHub repository activity."""
 
 import json
+import mimetypes
 import os
 import re
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import parse_qs, urlparse
+from pathlib import Path
+from urllib.parse import parse_qs, unquote, urlparse
 
 import requests
 
 
 BASE_URL = "https://api.github.com"
 RECENT_PR_COUNT = 7
+STATIC_DIR = Path(__file__).parent / "dist"
 HEADERS = {
     "Accept": "application/vnd.github+json",
     "User-Agent": "RepoScope-Repository-Analyzer",
@@ -203,7 +206,31 @@ class ApiHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_url = urlparse(self.path)
         if parsed_url.path != "/api/analyze":
-            self.send_json(404, {"error": "Endpoint not found."})
+            if parsed_url.path.startswith("/api/") or parsed_url.path == "/api":
+                self.send_json(404, {"error": "Endpoint not found."})
+                return
+
+            static_root = STATIC_DIR.resolve()
+            requested_path = unquote(parsed_url.path).lstrip("/")
+            static_path = (static_root / requested_path).resolve()
+            if not static_path.is_relative_to(static_root):
+                self.send_json(404, {"error": "Not found."})
+                return
+            if static_path.is_dir():
+                static_path /= "index.html"
+            if not static_path.is_file():
+                static_path = static_root / "index.html"
+            if not static_path.is_file():
+                self.send_json(404, {"error": "Endpoint not found."})
+                return
+
+            body = static_path.read_bytes()
+            content_type = mimetypes.guess_type(static_path.name)[0] or "application/octet-stream"
+            self.send_response(200)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
             return
 
         full_name = parse_qs(parsed_url.query).get("repo", [""])[0].strip().strip("/")
@@ -226,5 +253,5 @@ class ApiHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "8000"))
-    print(f"RepoScope API listening on http://127.0.0.1:{port}")
-    ThreadingHTTPServer(("127.0.0.1", port), ApiHandler).serve_forever()
+    print(f"RepoScope listening on http://0.0.0.0:{port}")
+    ThreadingHTTPServer(("0.0.0.0", port), ApiHandler).serve_forever()

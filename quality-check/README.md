@@ -23,6 +23,26 @@ npm run dev
 
 Open the local URL printed by Vite. The development server proxies `/api` requests to the Python API on port 8000. Set `GITHUB_TOKEN` before starting the API to raise GitHub's unauthenticated rate limit.
 
+## Run with Docker
+
+From this directory, build and start the production container:
+
+```bash
+./deploy_docker.sh
+```
+
+The site will be available at `http://<server-address>:43827`. The container restarts automatically unless stopped. To use a different host port, set `QUALITY_CHECK_PORT` before running the script. Set `GITHUB_TOKEN` in the environment first to raise GitHub's unauthenticated API rate limit.
+
+The script replaces the existing container named `quality-check` when redeployed. Set `CONTAINER_NAME` or `IMAGE_NAME` to customize these names.
+
+## Commit signature
+
+This repository includes a commit-message hook that adds an `Assisted-by: Copilot` trailer to commits when it is missing. Enable it from the repository root with:
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## Signals
 
 - The report includes repository stars, subscribers, community health, total default-branch commits, primary language, update date, and repository age.
