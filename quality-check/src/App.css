@@ -1,5 +1,5 @@
 .app-shell {
-  width: min(1120px, 100% - 64px);
+  width: min(1680px, 100% - 64px);
   min-height: 100vh;
   margin: 0 auto;
   padding: 0 0 24px;
@@ -9,11 +9,16 @@
 }
 
 .topbar {
+  position: relative;
+  left: 50%;
+  width: 100vw;
   height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-inline: max(16px, calc((100vw - 1680px) / 2));
   border-bottom: 1px solid var(--line);
+  transform: translateX(-50%);
 }
 
 .wordmark {
@@ -215,6 +220,74 @@ h1 {
 
 @keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@media (min-width: 1000px) {
+  .search-hero { width: min(960px, 100%); margin-top: 108px; }
+  .search-hero-compact { margin-top: 54px; }
+  h1 { margin-bottom: 15px; font-size: 45px; }
+  .hero-copy { font-size: 21px; }
+  .topbar {
+    height: 96px;
+    padding-inline: max(24px, calc((100vw - 1680px) / 2));
+  }
+  .wordmark { gap: 15px; font-size: 21px; }
+  .wordmark-mark { width: 42px; height: 42px; font-size: 24px; }
+  .theme-switch { gap: 13px; font-size: 18px; }
+  .theme-switch-track { width: 51px; height: 30px; padding: 3px; border-radius: 18px; }
+  .theme-switch-track span { width: 21px; height: 21px; }
+  .theme-switch[aria-checked='true'] .theme-switch-track span { transform: translateX(21px); }
+  .search-form { height: 90px; gap: 18px; margin-top: 42px; padding: 9px 10px 9px 27px; border-radius: 12px; }
+  .search-icon { font-size: 39px; }
+  .search-form input { font-size: 21px; }
+  .search-form button { height: 69px; min-width: 188px; gap: 15px; padding-inline: 24px; border-radius: 7px; font-size: 19px; }
+  .search-form button span[aria-hidden] { font-size: 27px; }
+  .search-hint { margin-top: 18px; font-size: 16px; }
+  .search-hint code { padding: 3px 7px; font-size: 16px; }
+  .spinner { width: 21px; height: 21px; border-width: 3px; }
+  .empty-note { gap: 18px; margin-top: 110px; font-size: 16px; }
+  .empty-rule { width: 39px; }
+  .report { margin: 64px 0 105px; }
+  .report-heading { gap: 36px; padding: 39px 45px 36px; }
+  .repo-identity { gap: 22px; }
+  .repo-avatar { flex-basis: 66px; width: 66px; height: 66px; font-size: 27px; }
+  .repo-kicker { font-size: 13px; }
+  .repo-identity h2 { font-size: 27px; }
+  .repo-identity p { font-size: 18px; }
+  .risk-summary { flex-basis: 218px; }
+  .risk-caption { font-size: 13px; }
+  .risk-summary strong { font-size: 42px; }
+  .risk-summary strong small { font-size: 16px; }
+  .risk-summary > span:last-child { font-size: 15px; }
+  .metrics-grid { padding: 30px 45px 33px; }
+  .metric { padding-inline: 22px; }
+  .metric-label { font-size: 15px; }
+  .metric-value { margin: 10px 0 3px; font-size: 22px; }
+  .metric-note { font-size: 13px; }
+  .signals-panel, .context-panel { padding: 34px 45px 37px; }
+  .section-heading { margin-bottom: 27px; }
+  .section-index, .sample-count { font-size: 13px; }
+  .section-heading h3 { margin-top: 6px; font-size: 21px; }
+  .pr-metrics { margin-bottom: 27px; padding-block: 21px; }
+  .pr-metric { gap: 5px; padding-left: 20px; }
+  .pr-metric strong { font-size: 27px; }
+  .pr-metric span { font-size: 13px; }
+  .flag-list { gap: 13px; }
+  .flag-row, .clear-state { gap: 15px; padding: 16px 18px; }
+  .flag-indicator { flex-basis: 10px; width: 10px; height: 10px; margin-top: 6px; }
+  .flag-row strong, .clear-state strong { font-size: 16px; }
+  .flag-row p, .clear-state p { margin-top: 5px; font-size: 15px; }
+  .flag-label { font-size: 13px; }
+  .clear-state > span { font-size: 24px; }
+  .pr-item { gap: 15px; padding-block: 16px; }
+  .pr-state { flex-basis: 30px; width: 30px; height: 30px; font-size: 16px; }
+  .pr-copy strong { font-size: 16px; }
+  .pr-copy small, .pr-count small { margin-top: 5px; font-size: 13px; }
+  .pr-count { flex-basis: 76px; }
+  .pr-count strong { font-size: 16px; }
+  .empty-prs { padding-block: 24px; font-size: 16px; }
+  .report-footer { gap: 22px; padding: 20px 45px; font-size: 13px; }
+  .report-footer a { font-size: 13px; }
+}
 
 @media (max-width: 850px) {
   .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 18px; }
