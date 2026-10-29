@@ -1,19 +1,34 @@
-# React + Vite
+# RepoScope
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+RepoScope summarizes public GitHub repository metadata and recent pull request activity. Its review signals are heuristics for closer inspection, not a way to determine whether code was AI-generated.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Use Python 3.9+ and Node.js. In the `quality-check` app directory, install the Python dependency and JavaScript packages:
 
-## React Compiler
+```bash
+python -m pip install -r requirements.txt
+npm install
+```
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Start the API and frontend in separate terminals:
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+```bash
+python backend.py
+```
 
-## Expanding the ESLint configuration
+```bash
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Open the local URL printed by Vite. The development server proxies `/api` requests to the Python API on port 8000. Set `GITHUB_TOKEN` before starting the API to raise GitHub's unauthenticated rate limit.
+
+## Signals
+
+- The report includes repository stars, subscribers, community health, total default-branch commits, primary language, update date, and repository age.
+- The latest seven pull requests are checked for average commits and average description length.
+- More than 10 average commits per PR is a watch signal; more than 20 is a high signal.
+- Average PR descriptions over 2,000 characters are a watch signal; over 5,000 are a high signal.
+- Four or more empty descriptions among the reviewed PRs is a watch signal.
+
+The 0–100 review-signal score is a weighted summary of these observable patterns. It is not a quality verdict and should be interpreted alongside the repository itself.
